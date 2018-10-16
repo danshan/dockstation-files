@@ -1,0 +1,58 @@
+version: '2'
+volumes:
+  local_datamongo: {}
+  local_dataelasticsearch: {}
+services:
+  local_elasticsearch:
+    extends:
+      file: common.yml
+      service: elasticsearch
+    volumes:
+      - 'local_dataelasticsearch:/usr/share/elasticsearch/data'
+      - './logs/elasticsearch:/var/log/elasticsearch'
+  local_mongodb:
+    extends:
+      file: common.yml
+      service: mongodb
+    volumes:
+      - 'local_datamongo:/data/db'
+      - './logs/mongodb:/var/log/mongodb'
+  local_gateway:
+    extends:
+      file: common.yml
+      service: gateway
+    links:
+      - 'local_mongodb:demo-mongodb'
+      - 'local_elasticsearch:demo-elasticsearch'
+    ports:
+      - '8000:8082'
+    volumes:
+      - './logs/gateway:/etc/gravitee.io/log'
+    environment:
+      - 'gravitee_management_mongodb_uri=mongodb://demo-mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000'
+      - 'gravitee_ratelimit_mongodb_uri=mongodb://demo-mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000'
+      - 'gravitee_reporters_elasticsearch_endpoints_0=http://demo-elasticsearch:9200'
+  local_managementui:
+    extends:
+      file: common.yml
+      service: managementui
+    ports:
+      - '8090:80'
+    volumes:
+      - './logs/management-ui:/var/log/httpd'
+    environment:
+      - 'MGMT_API_URL=http:\/\/localhost:8005\/management\/'
+  local_managementapi:
+    extends:
+      file: common.yml
+      service: managementapi
+    ports:
+      - '8005:8083'
+    volumes:
+      - './logs/management-api:/home/gravitee/logs'
+    links:
+      - 'local_mongodb:demo-mongodb'
+      - 'local_elasticsearch:demo-elasticsearch'
+    environment:
+      - 'gravitee_management_mongodb_uri=mongodb://demo-mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000'
+      - 'gravitee_analytics_elasticsearch_endpoints_0=http://demo-elasticsearch:9200'

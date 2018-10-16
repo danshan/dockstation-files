@@ -1,0 +1,12 @@
+version: '2'
+services:
+  mysql:
+    image: 'mysql:5.7'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+      MYSQL_USERNAME: root
+    volumes:
+      - '/Users/dan/workspace/data/mysql:/var/lib/mysql'
+    ports:
+      - '3306:3306'
