@@ -1,0 +1,8 @@
+version: '2'
+services:
+  sonarqube:
+    image: sonarqube
+    ports:
+      - '9000:9000'
+    volumes:
+      - './conf:/opt/sonarqube/conf'

@@ -50,6 +50,7 @@ services:
       - '8005:8083'
     volumes:
       - './logs/management-api:/home/gravitee/logs'
+      - '/Users/dan/workspace/data/gravitee:/opt/graviteeio-management-api/config'
     links:
       - 'local_mongodb:demo-mongodb'
       - 'local_elasticsearch:demo-elasticsearch'

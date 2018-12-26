@@ -1,0 +1,5 @@
+[mysqld]
+
+transaction-isolation=READ-COMMITTED
+max_allowed_packet=256M
+
