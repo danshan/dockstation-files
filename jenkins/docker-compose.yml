@@ -3,7 +3,7 @@ services:
   jenkins:
     image: jenkins/jenkins
     volumes:
-      - '/Users/dan/workspace/data/jenkins:/var/jenkins_home'
+      - '/Users/dan/workspace/personal/codes/dockstation-files:/var/jenkins_home'
     ports:
       - '8080:8080'
       - '50000:50000'
